@@ -771,6 +771,10 @@ impl Ipv4Addr {
     /// );
     /// ```
     #[stable(feature = "rust1", since = "1.0.0")]
+    #[rustc_deprecated(
+        since = "1.47.0",
+        reason = "the current IPv6 transition mechanisms no longer use these addresses"
+    )]
     pub fn to_ipv6_compatible(&self) -> Ipv6Addr {
         let octets = self.octets();
         Ipv6Addr::from([
@@ -2073,11 +2077,16 @@ mod tests {
     }
 
     #[test]
-    fn ipv4_to_ipv6() {
+    fn ipv4_to_ipv6_mapped() {
         assert_eq!(
             Ipv6Addr::new(0, 0, 0, 0, 0, 0xffff, 0x1234, 0x5678),
             Ipv4Addr::new(0x12, 0x34, 0x56, 0x78).to_ipv6_mapped()
         );
+    }
+
+    #[test]
+    #[allow(deprecated)]
+    fn ipv4_to_ipv6_compatible() {
         assert_eq!(
             Ipv6Addr::new(0, 0, 0, 0, 0, 0, 0x1234, 0x5678),
             Ipv4Addr::new(0x12, 0x34, 0x56, 0x78).to_ipv6_compatible()
